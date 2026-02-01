@@ -27,10 +27,10 @@
     "three": "^0.171.0"
   },
   "devDependencies": {
-    "@slicemachine/adapter-next": "^0.3.61",
+    "@slicemachine/adapter-next": "^1.0.0",
     "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "fluid-tailwind": "^1.0.4",
