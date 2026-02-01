@@ -1,50 +1,56 @@
-import { Content, isFilled } from "@prismicio/client";
-import {
-  PrismicRichText,
-  PrismicText,
-  SliceComponentProps,
-} from "@prismicio/react";
+'use client'
 
-import { Bounded } from "@/components/Bounded";
-import { Heading } from "@/components/Heading";
-import { SkateboardProduct } from "./SkateboardProduct";
-import { SlideIn } from "@/components/SlideIn";
+import { SkateboardProduct } from './SkateboardProduct'
 
-/**
- * Props for `ProductGrid`.
- */
-export type ProductGridProps = SliceComponentProps<Content.ProductGridSlice>;
+const products = [
+  {
+    id: '1',
+    name: 'Urban Shredder',
+    price: '$89.99',
+    image: '/products/board-1.jpg',
+    color: 'Navy Blue',
+  },
+  {
+    id: '2',
+    name: 'Neon Vibes',
+    price: '$94.99',
+    image: '/products/board-2.jpg',
+    color: 'Lime Green',
+  },
+  {
+    id: '3',
+    name: 'Fire Rider',
+    price: '$99.99',
+    image: '/products/board-3.jpg',
+    color: 'Electric Orange',
+  },
+  {
+    id: '4',
+    name: 'Purple Dream',
+    price: '$89.99',
+    image: '/products/board-4.jpg',
+    color: 'Deep Purple',
+  },
+]
 
-/**
- * Component for "ProductGrid" Slices.
- */
-const ProductGrid = ({ slice }: ProductGridProps): JSX.Element => {
+export function ProductGrid() {
   return (
-    <Bounded
-      data-slice-type={slice.slice_type}
-      data-slice-variation={slice.variation}
-      className="bg-texture bg-brand-gray"
-    >
-      <SlideIn>
-        <Heading className="text-center ~mb-4/6" as="h2">
-          <PrismicText field={slice.primary.heading} />
-        </Heading>
-      </SlideIn>
-      <SlideIn>
-        <div className="text-center ~mb-6/10">
-          <PrismicRichText field={slice.primary.body} />
+    <section className="bg-brand-gray py-20 px-6">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 font-sans text-5xl font-bold text-brand-purple">
+            Featured Products
+          </h2>
+          <p className="font-mono text-lg text-zinc-700">
+            Check out our latest skateboard designs and premium collections
+          </p>
         </div>
-      </SlideIn>
-      <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {slice.primary.product.map(
-          ({ skateboard }) =>
-            isFilled.contentRelationship(skateboard) && (
-              <SkateboardProduct key={skateboard.id} id={skateboard.id} />
-            )
-        )}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+          {products.map((product) => (
+            <SkateboardProduct key={product.id} product={product} />
+          ))}
+        </div>
       </div>
-    </Bounded>
-  );
-};
-
-export default ProductGrid;
+    </section>
+  )
+}

@@ -1,46 +1,59 @@
-import { PrismicNextImage, PrismicNextLink } from "@prismicio/next";
-import React from "react";
-import { asImageSrc } from "@prismicio/client";
+'use client'
 
-import { createClient } from "@/prismicio";
-import { Logo } from "@/components/Logo";
-import { Bounded } from "./Bounded";
-import { FooterPhysics } from "./FooterPhysics";
+import React from 'react'
+import Link from 'next/link'
+import { FiMail, FiInstagram, FiTwitter } from 'react-icons/fi'
 
-export async function Footer() {
-  const client = createClient();
-  const settings = await client.getSingle("settings");
-
-  const boardTextureURLs = settings.data.footer_skateboards
-    .map((item) => asImageSrc(item.skateboard, { h: 600 }))
-    .filter((url): url is string => Boolean(url));
+export function Footer() {
+  const navItems = ['Shop', 'Team', 'About', 'Contact']
 
   return (
-    <footer className="bg-texture bg-zinc-900 text-white overflow-hidden">
-      <div className="relative h-[75vh] ~p-10/16 md:aspect-auto">
-        <PrismicNextImage
-          field={settings.data.footer_image}
-          alt=""
-          fill
-          className="object-cover"
-          width={1200}
-        />
-        <FooterPhysics
-          boardTextureURLs={boardTextureURLs}
-          className="absolute inset-0 overflow-hidden"
-        />
-        <Logo className="pointer-events-none relative h-20 mix-blend-exclusion md:h-28" />
+    <footer className="bg-zinc-900 text-white py-16">
+      <div className="mx-auto max-w-7xl px-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+          <div>
+            <h3 className="font-sans text-2xl font-bold text-brand-lime mb-4">SUBURBIA</h3>
+            <p className="text-zinc-400">Handcrafted skateboard designs and premium quality.</p>
+          </div>
+          <div>
+            <h4 className="font-mono text-lg font-bold mb-4">Navigation</h4>
+            <ul className="space-y-2">
+              {navItems.map((item) => (
+                <li key={item}>
+                  <Link href={`/${item.toLowerCase()}`} className="text-zinc-400 hover:text-brand-lime transition-colors">
+                    {item}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-mono text-lg font-bold mb-4">Support</h4>
+            <ul className="space-y-2">
+              <li><Link href="/faq" className="text-zinc-400 hover:text-brand-lime transition-colors">FAQ</Link></li>
+              <li><Link href="/shipping" className="text-zinc-400 hover:text-brand-lime transition-colors">Shipping</Link></li>
+              <li><Link href="/returns" className="text-zinc-400 hover:text-brand-lime transition-colors">Returns</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="font-mono text-lg font-bold mb-4">Follow</h4>
+            <div className="flex gap-4">
+              <a href="#" aria-label="Instagram" className="text-zinc-400 hover:text-brand-lime transition-colors">
+                <FiInstagram size={24} />
+              </a>
+              <a href="#" aria-label="Twitter" className="text-zinc-400 hover:text-brand-lime transition-colors">
+                <FiTwitter size={24} />
+              </a>
+              <a href="#" aria-label="Email" className="text-zinc-400 hover:text-brand-lime transition-colors">
+                <FiMail size={24} />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div className="border-t border-zinc-700 pt-8 text-center text-zinc-400">
+          <p>&copy; 2024 Suburbia. All rights reserved.</p>
+        </div>
       </div>
-      <Bounded as="nav">
-        <ul className="flex flex-wrap justify-center gap-8 ~text-lg/xl">
-          {settings.data.navigation.map((item) => (
-            <li key={item.link.text} className="hover:underline">
-              <PrismicNextLink field={item.link} />
-            </li>
-          ))}
-        </ul>
-      </Bounded>
-      {/* List of links */}
     </footer>
-  );
+  )
 }

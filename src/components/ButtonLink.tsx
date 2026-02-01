@@ -1,57 +1,59 @@
-import { FaCartShopping, FaPlus } from "react-icons/fa6";
-import { PrismicNextLink, PrismicNextLinkProps } from "@prismicio/next";
-import clsx from "clsx";
+'use client'
 
-export type ButtonProps = PrismicNextLinkProps & {
-  color?: "orange" | "purple" | "lime";
-  size?: "sm" | "md" | "lg";
-  icon?: "cart" | "skateboard" | "plus";
-};
+import { FaCartShopping, FaPlus } from 'react-icons/fa6'
+import Link from 'next/link'
+import clsx from 'clsx'
+import { ReactNode } from 'react'
+
+export type ButtonProps = {
+  href?: string
+  color?: 'orange' | 'purple' | 'lime'
+  size?: 'sm' | 'md' | 'lg'
+  icon?: 'cart' | 'skateboard' | 'plus'
+  children?: ReactNode
+  className?: string
+}
 
 export function ButtonLink({
-  color = "orange",
-  size = "md",
+  href = '#',
+  color = 'orange',
+  size = 'md',
   icon,
   children,
   className,
-  ...props
 }: ButtonProps) {
   return (
-    <PrismicNextLink
+    <Link
+      href={href}
       className={clsx(
-        "button-cutout group mx-4 inline-flex items-center bg-gradient-to-b from-25% to-75% bg-[length:100%_400%] font-bold transition-[filter,background-position] duration-300 hover:bg-bottom",
-        size === "sm" && "gap-2.5 py-2 text-base",
-        size === "md" && "gap-3 px-1 text-lg ~py-2.5/3",
-        size === "lg" && "~text-lg/2xl ~gap-3/4 ~px-1/2 ~py-3/4",
-        color === "orange" &&
-          "from-brand-orange to-brand-lime text-black hover:text-black",
-        color === "purple" &&
-          "from-brand-purple to-brand-lime text-white hover:text-black",
-        color === "lime" && "from-brand-lime to-brand-orange text-black",
+        'group inline-flex items-center rounded-lg font-bold transition-colors',
+        size === 'sm' && 'gap-2 px-3 py-2 text-sm',
+        size === 'md' && 'gap-3 px-4 py-2 text-base',
+        size === 'lg' && 'gap-4 px-6 py-3 text-lg',
+        color === 'orange' && 'bg-brand-orange text-black hover:bg-brand-orange/80',
+        color === 'purple' && 'bg-brand-purple text-white hover:bg-brand-navy',
+        color === 'lime' && 'bg-brand-lime text-black hover:bg-brand-lime/80',
         className
       )}
-      {...props}
     >
       {icon ? (
-        <>
-          <div
-            className={clsx(
-              "flex size-6 items-center justify-center transition-transform group-hover:-rotate-[25deg] [&>svg]:h-full [&>svg]:w-full",
-              size === "sm" && "size-5",
-              size === "md" && "size-6",
-              size === "lg" && "~size-6/8"
-            )}
-          >
-            {icon === "cart" && <FaCartShopping />}
-            {icon === "skateboard" && <SkateboardIcon />}
-            {icon === "plus" && <FaPlus />}
-          </div>
-          <div className="w-px self-stretch bg-black/25" />
-        </>
+        <div className="flex items-center justify-center transition-transform group-hover:rotate-12">
+          {icon === 'cart' && <FaCartShopping size={20} />}
+          {icon === 'skateboard' && <SkateboardIcon />}
+          {icon === 'plus' && <FaPlus size={20} />}
+        </div>
       ) : null}
       {children}
-    </PrismicNextLink>
-  );
+    </Link>
+  )
+}
+
+function SkateboardIcon() {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" width={20} height={20}>
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+    </svg>
+  )
 }
 
 function SkateboardIcon() {

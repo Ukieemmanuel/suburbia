@@ -1,48 +1,56 @@
-import { Bounded } from "@/components/Bounded";
-import { Heading } from "@/components/Heading";
-import { createClient } from "@/prismicio";
-import { Content } from "@prismicio/client";
-import { PrismicText, SliceComponentProps } from "@prismicio/react";
-import React from "react";
-import { Skater } from "./Skater";
-import { SlideIn } from "@/components/SlideIn";
+'use client'
 
-/**
- * Props for `TeamGrid`.
- */
-export type TeamGridProps = SliceComponentProps<Content.TeamGridSlice>;
+import { Skater } from './Skater'
 
-/**
- * Component for "TeamGrid" Slices.
- */
-const TeamGrid = async ({ slice }: TeamGridProps): Promise<JSX.Element> => {
-  const client = createClient();
-  const skaters = await client.getAllByType("skater");
+const skaters = [
+  {
+    id: '1',
+    firstName: 'Alex',
+    lastName: 'Rivera',
+    role: 'Pro Rider',
+    image: '/team/skater-1.jpg',
+  },
+  {
+    id: '2',
+    firstName: 'Jordan',
+    lastName: 'Smith',
+    role: 'Designer',
+    image: '/team/skater-2.jpg',
+  },
+  {
+    id: '3',
+    firstName: 'Casey',
+    lastName: 'Chen',
+    role: 'Content Creator',
+    image: '/team/skater-3.jpg',
+  },
+  {
+    id: '4',
+    firstName: 'Morgan',
+    lastName: 'Williams',
+    role: 'Community Lead',
+    image: '/team/skater-4.jpg',
+  },
+]
 
+export function TeamGrid() {
   return (
-    <Bounded
-      data-slice-type={slice.slice_type}
-      data-slice-variation={slice.variation}
-      className="bg-texture bg-brand-navy"
-    >
-      <SlideIn>
-        <Heading as="h2" size="lg" className="mb-8 text-center text-white">
-          <PrismicText field={slice.primary.heading} />
-        </Heading>
-      </SlideIn>
-      <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
-        {skaters.map((skater, index) => (
-          <React.Fragment key={index}>
-            {skater.data.first_name && (
-              <SlideIn>
-                <Skater index={index} skater={skater} />
-              </SlideIn>
-            )}
-          </React.Fragment>
-        ))}
+    <section className="bg-brand-navy py-20 px-6">
+      <div className="mx-auto max-w-7xl">
+        <div className="mb-12 text-center">
+          <h2 className="mb-4 font-sans text-5xl font-bold text-white">
+            Our Team
+          </h2>
+          <p className="font-mono text-lg text-zinc-300">
+            Meet the passionate riders and creators behind Suburbia
+          </p>
+        </div>
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+          {skaters.map((skater, index) => (
+            <Skater key={skater.id} index={index} skater={skater} />
+          ))}
+        </div>
       </div>
-    </Bounded>
-  );
-};
-
-export default TeamGrid;
+    </section>
+  )
+}

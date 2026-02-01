@@ -1,39 +1,34 @@
-import Link from "next/link";
-import React from "react";
-import { ButtonLink } from "./ButtonLink";
-import { Logo } from "./Logo";
-import { createClient } from "@/prismicio";
-import { PrismicNextLink } from "@prismicio/next";
+'use client'
 
-export async function Header() {
-  const client = createClient();
-  const settings = await client.getSingle("settings");
+import Link from 'next/link'
+import React from 'react'
+import { FiShoppingCart } from 'react-icons/fi'
+
+export function Header() {
+  const navItems = ['Shop', 'Team', 'About', 'Contact']
 
   return (
-    <header className="header absolute left-0 right-0 top-0 z-50 ~h-32/48 ~px-4/6 ~py-4/6 hd:h-32">
-      <div className="mx-auto grid w-full max-w-6xl grid-cols-[auto,auto] items-center gap-6 md:grid-cols-[1fr,auto,1fr]">
-        <Link href="/" className="justify-self-start">
-          <Logo className="text-brand-purple ~h-12/20" />
+    <header className="header fixed left-0 right-0 top-0 z-50 h-20 px-6 py-4 bg-white/80 backdrop-blur-sm border-b border-zinc-200">
+      <div className="mx-auto flex w-full max-w-7xl items-center justify-between">
+        <Link href="/" className="font-sans text-2xl font-bold text-brand-purple">
+          SUBURBIA
         </Link>
-        <nav
-          aria-label="Main"
-          className="col-span-full row-start-2 md:col-span-1 md:col-start-2 md:row-start-1"
-        >
-          <ul className="flex flex-wrap items-center justify-center gap-8">
-            {settings.data.navigation.map((item) => (
-              <li key={item.link.text}>
-                <PrismicNextLink field={item.link} className="~text-lg/xl" />
+        <nav aria-label="Main" className="hidden md:block">
+          <ul className="flex items-center gap-8">
+            {navItems.map((item) => (
+              <li key={item}>
+                <Link href={`/${item.toLowerCase()}`} className="text-lg font-mono hover:text-brand-blue transition-colors">
+                  {item}
+                </Link>
               </li>
             ))}
           </ul>
         </nav>
-        <div className="justify-self-end">
-          <ButtonLink href="" icon="cart" color="purple" aria-label="Cart (1)">
-            <span className="md:hidden">1</span>
-            <span className="hidden md:inline">Cart (1)</span>
-          </ButtonLink>
-        </div>
+        <button className="flex items-center gap-2 rounded-lg bg-brand-purple px-4 py-2 text-white hover:bg-brand-navy transition-colors" aria-label="Cart (1)">
+          <FiShoppingCart size={20} />
+          <span className="hidden md:inline">Cart (1)</span>
+        </button>
       </div>
     </header>
-  );
+  )
 }

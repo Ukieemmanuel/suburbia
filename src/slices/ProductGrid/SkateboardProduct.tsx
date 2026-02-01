@@ -1,80 +1,43 @@
-import { Content, isFilled } from "@prismicio/client";
-import { PrismicNextImage } from "@prismicio/next";
-import { FaStar } from "react-icons/fa6";
+'use client'
 
-import { createClient } from "@/prismicio";
-import { ButtonLink } from "@/components/ButtonLink";
-import { HorizontalLine, VerticalLine } from "@/components/Line";
-import clsx from "clsx";
-import { Scribble } from "./Scribble";
+import { FaStar } from 'react-icons/fa6'
 
-async function getDominantColor(url: string) {
-  const paletteURL = new URL(url);
-  paletteURL.searchParams.set("palette", "json");
-
-  const res = await fetch(paletteURL);
-  const json = await res.json();
-
-  return (
-    json.dominant_colors.vibrant?.hex || json.dominant_colors.vibrant_light?.hex
-  );
+type Product = {
+  id: string
+  name: string
+  price: string
+  image: string
+  color: string
 }
 
 type Props = {
-  id: string;
-};
+  product: Product
+}
 
-const VERTICAL_LINE_CLASSES =
-  "absolute top-0 h-full stroke-2 text-stone-300 transition-colors group-hover:text-stone-400";
-
-const HORIZONTAL_LINE_CLASSES =
-  "-mx-8 stroke-2 text-stone-300 transition-colors group-hover:text-stone-400";
-
-export async function SkateboardProduct({ id }: Props) {
-  const client = createClient();
-  const product = await client.getByID<Content.SkateboardDocument>(id);
-
-  const price = isFilled.number(product.data.price)
-    ? `$${(product.data.price / 100).toFixed(2)}`
-    : "Price Not Available";
-
-  const dominantColor = isFilled.image(product.data.image)
-    ? await getDominantColor(product.data.image.url)
-    : undefined;
-
+export function SkateboardProduct({ product }: Props) {
   return (
-    <div className="group relative mx-auto w-full max-w-72 px-8 pt-4 ">
-      <VerticalLine className={clsx(VERTICAL_LINE_CLASSES, "left-4")} />
-      <VerticalLine className={clsx(VERTICAL_LINE_CLASSES, "right-4")} />
-      <HorizontalLine className={HORIZONTAL_LINE_CLASSES} />
-
-      <div className="flex items-center justify-between ~text-sm/2xl">
-        <span>{price}</span>
-        <span className="inline-flex items-center gap-1">
-          <FaStar className="text-yellow-400" /> 37
+    <div className="group relative mx-auto w-full rounded-lg border border-zinc-200 p-6 transition-all hover:border-brand-purple hover:shadow-lg">
+      <div className="mb-4 flex items-center justify-between">
+        <span className="font-mono text-lg font-bold text-brand-purple">{product.price}</span>
+        <span className="inline-flex items-center gap-1 font-mono text-sm">
+          <FaStar className="text-yellow-400" /> 4.8
         </span>
       </div>
-      <div className="-mb-1 overflow-hidden py-4">
-        <Scribble
-          className="absolute inset-0 h-full w-full"
-          color={dominantColor}
-        />
-        <PrismicNextImage
-          alt=""
-          field={product.data.image}
-          width={150}
-          className=" mx-auto w-[58%] origin-top transform-gpu transition-transform duration-500 ease-in-out group-hover:scale-150"
-        />
+      
+      <div className="mb-4 h-48 overflow-hidden rounded-md bg-zinc-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-4xl font-bold text-zinc-300 mb-2">{product.color.charAt(0)}</div>
+          <p className="text-zinc-500 font-mono">{product.color}</p>
+        </div>
       </div>
-      <HorizontalLine className={HORIZONTAL_LINE_CLASSES} />
 
-      <h3 className="my-2 text-center font-sans leading-tight ~text-lg/xl">
-        {product.data.name}
+      <h3 className="mb-3 text-center font-sans text-lg font-bold text-zinc-800">
+        {product.name}
       </h3>
 
-      <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-        <ButtonLink field={product.data.customizer_link}>Customize</ButtonLink>
-      </div>
+      <button className="w-full rounded-lg bg-brand-purple py-2 font-mono font-bold text-white transition-colors hover:bg-brand-navy">
+        Add to Cart
+      </button>
     </div>
-  );
+  )
 }

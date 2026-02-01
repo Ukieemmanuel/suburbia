@@ -1,51 +1,49 @@
-import { ButtonLink } from "@/components/ButtonLink";
-import { Content } from "@prismicio/client";
-import { PrismicNextImage } from "@prismicio/next";
-import { SkaterScribble } from "./SkaterScribble";
-import clsx from "clsx";
+'use client'
+
+type Skater = {
+  id: string
+  firstName: string
+  lastName: string
+  role: string
+  image: string
+}
 
 type Props = {
-  skater: Content.SkaterDocument;
-  index: number;
-};
+  skater: Skater
+  index: number
+}
+
+const colors = [
+  'text-brand-blue',
+  'text-brand-lime',
+  'text-brand-orange',
+  'text-brand-pink',
+  'text-brand-purple',
+]
 
 export function Skater({ skater, index }: Props) {
-  const colors = [
-    "text-brand-blue",
-    "text-brand-lime",
-    "text-brand-orange",
-    "text-brand-pink",
-    "text-brand-purple",
-  ];
-
-  const scribbleColor = colors[index];
+  const bgColor = colors[index % colors.length]
 
   return (
-    <div className="skater group relative flex flex-col items-center gap-4">
-      <div className="stack-layout overflow-hidden">
-        <PrismicNextImage
-          field={skater.data.photo_background}
-          width={500}
-          imgixParams={{ q: 20 }}
-          alt=""
-          className="scale-110 transform transition-all duration-1000 ease-in-out group-hover:scale-100 group-hover:brightness-75 group-hover:saturate-[.8]"
-        />
-        <SkaterScribble className={clsx("relative", scribbleColor)} />
-        <PrismicNextImage
-          field={skater.data.photo_foreground}
-          width={500}
-          alt=""
-          className="transform transition-transform duration-1000 ease-in-out group-hover:scale-110"
-        />
-        <div className="relative h-48 w-full place-self-end bg-gradient-to-t from-black via-transparent to-transparent"></div>
-        <h3 className="relative grid place-self-end justify-self-start p-2 font-sans text-brand-gray ~text-2xl/3xl">
-          <span className="mb-[-.3em] block">{skater.data.first_name}</span>
-          <span className="block">{skater.data.last_name}</span>
-        </h3>
+    <div className="group relative flex flex-col items-center gap-4">
+      <div className="relative w-full overflow-hidden rounded-lg bg-zinc-800">
+        <div className="aspect-square bg-gradient-to-b from-zinc-700 to-zinc-900 flex items-center justify-center transform transition-transform duration-500 group-hover:scale-110">
+          <div className="text-center">
+            <div className="text-6xl font-bold text-zinc-500 mb-2">{skater.firstName.charAt(0)}</div>
+            <p className="text-zinc-400 font-mono">{skater.role}</p>
+          </div>
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+        <div className="absolute bottom-0 left-0 right-0 p-4 text-white">
+          <h3 className="font-sans text-2xl font-bold">
+            <span className="block">{skater.firstName}</span>
+            <span className="block">{skater.lastName}</span>
+          </h3>
+        </div>
       </div>
-      <ButtonLink field={skater.data.customizer_link} size="sm">
-        Build their board
-      </ButtonLink>
+      <button className="rounded-lg border-2 border-brand-lime bg-transparent px-4 py-2 font-mono font-bold text-brand-lime transition-colors hover:bg-brand-lime hover:text-brand-navy">
+        Learn More
+      </button>
     </div>
-  );
+  )
 }
